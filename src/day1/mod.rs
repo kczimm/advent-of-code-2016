@@ -12,8 +12,8 @@ impl From<&str> for Instruction {
         let direction = chars.next().expect("no direction");
         let steps = chars.as_str().parse().expect("parse steps failed");
         match direction {
-            'R' => Instruction::Right(steps),
-            'L' => Instruction::Left(steps),
+            'R' => Self::Right(steps),
+            'L' => Self::Left(steps),
             d => panic!("bad direction: {d}"),
         }
     }
