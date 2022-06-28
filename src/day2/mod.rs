@@ -42,7 +42,7 @@ pub trait Keypad {
                 p.0 += 1;
             }
         }
-        if Self::key_char(position).is_some() {
+        if Self::key_char(p).is_some() {
             p
         } else {
             position
@@ -53,11 +53,11 @@ pub trait Keypad {
         let start = Self::start_position();
         directions
             .lines()
-            .filter_map(|l| {
+            .map(|l| {
                 let position = l
                     .chars()
                     .fold(start, |pos, c| Self::press_direction(pos, c.into()));
-                Self::key_char(position)
+                Self::key_char(position).unwrap()
             })
             .collect()
     }
