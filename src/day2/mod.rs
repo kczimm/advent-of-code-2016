@@ -50,13 +50,14 @@ pub trait Keypad {
     }
 
     fn apply_directions(directions: &str) -> String {
-        let start = Self::start_position();
+        let mut start = Self::start_position();
         directions
             .lines()
             .map(|l| {
                 let position = l
                     .chars()
                     .fold(start, |pos, c| Self::press_direction(pos, c.into()));
+                start = position;
                 Self::key_char(position).unwrap()
             })
             .collect()
@@ -127,6 +128,19 @@ LURDL
 UUUUD",
             ),
             "1985"
+        );
+    }
+
+    #[test]
+    fn example2() {
+        assert_eq!(
+            CrazyKeypad::apply_directions(
+                "ULL
+RRDDD
+LURDL
+UUUUD",
+            ),
+            "5DB3"
         );
     }
 }

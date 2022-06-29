@@ -1,8 +1,6 @@
-use advent_of_code_2016::day2::{Keypad, INPUT};
+use advent_of_code_2016::day2::{BasicKeypad, CrazyKeypad, Keypad, INPUT};
 
 fn main() {
-    let mut keypad = Keypad::new();
-    let code = keypad.apply_directions(INPUT);
-
-    println!("part1: {:?}", code);
+    println!("part1: {:?}", BasicKeypad::apply_directions(INPUT));
+    println!("part2: {:?}", CrazyKeypad::apply_directions(INPUT));
 }
