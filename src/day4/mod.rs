@@ -47,6 +47,19 @@ impl Room {
         }
         true
     }
+
+    fn decrypt_name(&self) -> String {
+        self.encrypted_name
+            .chars()
+            .map(|c| {
+                if c == '-' {
+                    ' '
+                } else {
+                    shift_char(c, self.sector_id)
+                }
+            })
+            .collect()
+    }
 }
 
 pub fn sum_of_sector_ids_of_real_rooms(input: &str) -> usize {
@@ -63,9 +76,42 @@ pub fn sum_of_sector_ids_of_real_rooms(input: &str) -> usize {
         .sum()
 }
 
+pub fn sector_id_of_northpole_object_store(input: &str) -> usize {
+    input
+        .lines()
+        .filter_map(|s| {
+            let room = Room::from(s, &RE);
+            if room.is_real() {
+                Some(room)
+            } else {
+                None
+            }
+        })
+        .find(|r| r.decrypt_name() == "northpole object storage")
+        .unwrap()
+        .sector_id
+}
+
+fn shift_char(c: char, amount: usize) -> char {
+    let a = 'a' as usize;
+    let z = 'z' as usize;
+    char::from_u32(((c as usize + amount - a) % (z - a + 1) + a) as _).unwrap()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_shift_cipher() {
+        let room = Room {
+            encrypted_name: "qzmt-zixmtkozy-ivhz".to_owned(),
+            sector_id: 343,
+            checksum: "".to_owned(),
+        };
+
+        assert_eq!(room.decrypt_name(), "very encrypted name");
+    }
 
     #[test]
     fn test_room_from() {
